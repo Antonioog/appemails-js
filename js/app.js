@@ -17,17 +17,18 @@ document.addEventListener("DOMContentLoaded", function () {
         `El campo ${e.target.id} es obligatorio`,
         e.target.parentElement
       );
-    } else {
-      console.log("Campo con informacion");
+      return;
     }
+    if (!validarEmail(e.target.value)) {
+      mostrarAlerta("El email no es valido", e.target.parentElement);
+      return;
+    }
+    limpiarAlerta(e.target.parentElement);
   }
   //Creamos uns funcion para que muestre la alerta en cada error...
   function mostrarAlerta(mensaje, referencia) {
     //Comprueba si ya existe una alerta..
-    const alerta = referencia.querySelector(".bg-red-600");
-    if (alerta) {
-      alerta.remove();
-    }
+    limpiarAlerta(referencia);
     //Creamos el HTML de la alerta...
     const error = document.createElement("P");
     error.textContent = mensaje;
@@ -35,5 +36,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
     //Inyectamos el mensaje en el formulario...
     referencia.appendChild(error);
+  }
+
+  function limpiarAlerta(referencia) {
+    const alerta = referencia.querySelector(".bg-red-600");
+    if (alerta) {
+      alerta.remove();
+    }
+  }
+
+  //Validar Email...
+  function validarEmail(email) {
+    const regex = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
+    const resultado = regex.test(email);
+    return resultado;
   }
 });
